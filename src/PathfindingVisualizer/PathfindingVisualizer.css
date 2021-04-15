@@ -1,0 +1,14 @@
+* {
+    margin: 0;
+    padding: 0;
+}
+
+.grid-container {
+    display: flex;
+    justify-content: center;
+    margin-top: 100px;
+}
+
+table {
+    border-collapse: collapse
+}

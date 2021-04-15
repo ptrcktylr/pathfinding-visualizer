@@ -1,0 +1,23 @@
+.node {
+    width: 25px;
+    height: 25px;
+    border: 1px solid gray;
+    margin: 0;
+    padding: 0;
+}
+
+.node-start {
+    background-color: aquamarine;
+}
+
+.node-finish {
+    background-color: greenyellow;
+}
+
+.node-visited {
+    background-color: bisque;
+}
+
+.node-path {
+    background-color: rgb(231, 231, 150);
+}
