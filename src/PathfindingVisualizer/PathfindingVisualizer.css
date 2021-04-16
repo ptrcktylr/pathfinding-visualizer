@@ -12,3 +12,11 @@
 table {
     border-collapse: collapse
 }
+
+.navbar-nav.buttons {
+    padding-left: 30px;
+}
+
+.navbar-nav.buttons button {
+    margin: 0 20px 0 20px;
+}

@@ -34,10 +34,10 @@ export default class Node extends Component {
       <td
         id={`node-${row}-${col}`}
         className={`node ${extraClassName}`}
-        // onMouseDown={() => onMouseDown(row, col)}
-        // onMouseEnter={() => onMouseEnter(row, col)}
-        // onMouseUp={() => onMouseUp()}
-      ></td> // It is used to create the grid.
+        onMouseDown={() => onMouseDown(row, col)}
+        onMouseEnter={() => onMouseEnter(row, col)}
+        onMouseUp={() => onMouseUp()}
+      ></td>
     );
   }
 }

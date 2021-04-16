@@ -9,6 +9,9 @@ const START_NODE_COL = 15;
 const FINISH_NODE_ROW = 10;
 const FINISH_NODE_COL = 35;
 
+const NUM_GRID_ROWS = 30;
+const NUM_GRID_COLS = 60;
+
 export default class PathfindingVisualizer extends Component {
     constructor() {
         super();
@@ -22,6 +25,21 @@ export default class PathfindingVisualizer extends Component {
     componentDidMount() {
         const grid = getInitialGrid();
         this.setState({grid});
+    }
+
+    handleMouseDown(row, col) {
+        const newGrid = getNewGridWithWallsToggled(this.state.grid, row, col);
+        this.setState({ grid: newGrid, mouseIsPressed: true });
+    }
+
+    handleMouseEnter(row, col) {
+        if (!this.state.mouseIsPressed) return;
+        const newGrid = getNewGridWithWallsToggled(this.state.grid, row, col);
+        this.setState( {grid: newGrid} );
+    }
+
+    handleMouseUp() {
+        this.setState({ mouseIsPressed: false });
     }
 
     // handles visualization of dijkstra
@@ -66,12 +84,46 @@ export default class PathfindingVisualizer extends Component {
         }
     }
 
+    // reset board
+    clearBoard() {
+        const grid = getInitialGrid();
+        this.setState({ grid });
+        this.clearPath();
+    }
+
+    // just remove path and visisted
+    clearPath() {
+        let all_nodes = document.querySelectorAll('.node');
+        for (let node of all_nodes) {
+            if (node.classList.contains('node-visited') || node.classList.contains('node-path')) {
+                node.className = 'node';
+            }
+        }
+    }
+
     render() {
         const {grid, mouseIsPressed} = this.state;
 
         return (
             <div className="pathfinding-visualizer">
-                <button onClick={() => this.visualizeDijkstra()}>Visualize Dijkstra</button>
+                <nav className="navbar navbar-expand-lg navbar-dark bg-dark">
+                    <div className="container-fluid">
+                        <div className="navbar-brand">Pathfinding Visualizer</div>
+                        <ul className='nav navbar-nav d-flex w-100 buttons'>
+                            <div className="dropdown">
+                                <button className="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
+                                    Algorithms
+                                </button>
+                                <ul className="dropdown-menu" aria-labelledby="dropdownMenuButton1">
+                                    <li><div className="dropdown-item" onClick={() => this.visualizeDijkstra()}>Dijkstra's Algorithm</div></li>
+                                </ul>
+                            </div>
+
+                            <li><button onClick={() => this.clearBoard()} className="btn btn-secondary">Clear Board</button></li>
+                            <li><button onClick={() => this.clearPath()} className="btn btn-secondary">Clear Path</button></li>
+                        </ul>
+                    </div>
+                </nav>
                 <div className="grid-container">
                     <table className="grid">
                         <tbody>
@@ -111,9 +163,9 @@ export default class PathfindingVisualizer extends Component {
 // generates initial grid
 const getInitialGrid = () => {
     const grid = [];
-    for (let row = 0; row < 20; row++) {
+    for (let row = 0; row < NUM_GRID_ROWS; row++) {
         const currentRow = [];
-        for (let col = 0; col < 50; col++) {
+        for (let col = 0; col < NUM_GRID_COLS; col++) {
             currentRow.push(createNode(col, row));
         }
         grid.push(currentRow);
@@ -132,4 +184,14 @@ const createNode = (col, row) => {
         isWall: false,
         previousNode: null,
     };
-  };
+};
+
+const getNewGridWithWallsToggled = (grid, row, col) => {
+    const newGrid = [...grid];
+    const node = newGrid[row][col]
+
+    // copy node and just toggle wall using negation of current wall property
+    const newNode = { ...node, isWall: !node.isWall }
+    newGrid[row][col] = newNode;
+    return newGrid;
+}

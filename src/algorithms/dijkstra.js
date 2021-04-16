@@ -17,7 +17,9 @@ export function dijkstra(grid, startNode, endNode) {
         if (closestNode.isWall) continue;
 
         // if the closest node distance is infinity, we're stuck
-        if (closestNode.distance === Infinity) return nodesInOrder;
+        if (closestNode.distance === Infinity) {
+            return nodesInOrder
+        };
 
         // set the node to visited and add it to the array of visited
         closestNode.isVisited = true;
@@ -95,6 +97,6 @@ export function getPath(endNode) {
         path.unshift(currentNode);
         currentNode = currentNode.previousNode;
     }
-    
+
     return path;
 }
