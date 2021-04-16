@@ -9,8 +9,8 @@ const START_NODE_COL = 15;
 const FINISH_NODE_ROW = 10;
 const FINISH_NODE_COL = 35;
 
-const NUM_GRID_ROWS = 30;
-const NUM_GRID_COLS = 60;
+const NUM_GRID_ROWS = 20;
+const NUM_GRID_COLS = 40;
 
 export default class PathfindingVisualizer extends Component {
     constructor() {
@@ -18,6 +18,7 @@ export default class PathfindingVisualizer extends Component {
         this.state = {
             grid: [],
             mouseIsPressed: false,
+            running: false,
         };
     };
 
@@ -28,28 +29,47 @@ export default class PathfindingVisualizer extends Component {
     }
 
     handleMouseDown(row, col) {
+        if (this.state.running) {
+            console.log('running!! stop clicking');
+            return;
+        };
         const newGrid = getNewGridWithWallsToggled(this.state.grid, row, col);
         this.setState({ grid: newGrid, mouseIsPressed: true });
     }
 
     handleMouseEnter(row, col) {
+        // if (this.state.running) {
+        //     console.log('running!! stop clicking');
+        //     return;
+        // };
         if (!this.state.mouseIsPressed) return;
         const newGrid = getNewGridWithWallsToggled(this.state.grid, row, col);
         this.setState( {grid: newGrid} );
     }
 
     handleMouseUp() {
+        // if (this.state.running) {
+        //     console.log('running!! stop clicking');
+        //     return;
+        // };
         this.setState({ mouseIsPressed: false });
     }
 
     // handles visualization of dijkstra
     visualizeDijkstra() {
+
+        // set program as running to prevent wall creation & button presses
+        this.setState({ running: true });
+
         const {grid} = this.state;
         const startNode = grid[START_NODE_ROW][START_NODE_COL];
         const endNode = grid[FINISH_NODE_ROW][FINISH_NODE_COL];
         const visitedNodesInOrder = dijkstra(grid, startNode, endNode);
         const path = getPath(endNode);
         this.animateDijkstra(visitedNodesInOrder, path);
+
+        // set program as not running
+        enableButtons();
     }
 
     // handles animating visited nodes and path
@@ -57,8 +77,10 @@ export default class PathfindingVisualizer extends Component {
         for (let i = 0; i <= visitedNodesInOrder.length; i++) {
             if (i === visitedNodesInOrder.length) {
                 setTimeout(() => {
-                    this.animatePath(path); 
+                    this.setState({ running: false });
+                    this.animatePath(path);
                 }, 10 * i);
+
                 return;
             }
             setTimeout(() => {
@@ -115,12 +137,12 @@ export default class PathfindingVisualizer extends Component {
                                     Algorithms
                                 </button>
                                 <ul className="dropdown-menu" aria-labelledby="dropdownMenuButton1">
-                                    <li><div className="dropdown-item" onClick={() => this.visualizeDijkstra()}>Dijkstra's Algorithm</div></li>
+                                    <li><div id='dijkstraButton' className="dropdown-item disable-me" onClick={() => this.visualizeDijkstra()}>Dijkstra's Algorithm</div></li>
                                 </ul>
                             </div>
 
-                            <li><button onClick={() => this.clearBoard()} className="btn btn-secondary">Clear Board</button></li>
-                            <li><button onClick={() => this.clearPath()} className="btn btn-secondary">Clear Path</button></li>
+                            <li><button id='clearBoardButton' onClick={() => this.clearBoard()} className="btn btn-secondary disable-me">Clear Board</button></li>
+                            <li><button id='clearPathButton' onClick={() => this.clearPath()} className="btn btn-secondary disable-me">Clear Path</button></li>
                         </ul>
                     </div>
                 </nav>
@@ -194,4 +216,21 @@ const getNewGridWithWallsToggled = (grid, row, col) => {
     const newNode = { ...node, isWall: !node.isWall }
     newGrid[row][col] = newNode;
     return newGrid;
+}
+
+const disableButtons = () => {
+    let buttons_to_disable = document.querySelectorAll('.disable-me');
+    console.log(buttons_to_disable);
+    for (const button of buttons_to_disable) {
+        button.classList.remove('enabled');
+        button.classList.add('disabled');
+    }
+}
+
+const enableButtons = () => {
+    let buttons_to_enable = document.querySelectorAll('.disable-me');
+    for (const button of buttons_to_enable) {
+        button.classList.remove('disabled');
+        button.classList.add('enabled');
+    }
 }

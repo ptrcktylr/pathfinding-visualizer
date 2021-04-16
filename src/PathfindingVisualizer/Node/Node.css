@@ -1,17 +1,21 @@
 .node {
     width: 25px;
     height: 25px;
-    border: 1px solid #9A8C98;
+    border: 1px solid #77d4e9;
     margin: 0;
     padding: 0;
 }
 
 .node-start {
-    background-color: aquamarine;
+  background-image: url(../../images/start.png);
+  background-size: 100%;
+  background-repeat: no-repeat;
 }
 
 .node-finish {
-    background-color: greenyellow;
+  background-image: url(../../images/finish.png);
+  background-size: 100%;
+  background-repeat: no-repeat;
 }
 
 .node-visited {
