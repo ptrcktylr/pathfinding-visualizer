@@ -15,9 +15,70 @@
 }
 
 .node-visited {
-    background-color: bisque;
-}
+    animation-name: visitedAnimation;
+    animation-duration: 1.5s;
+    animation-timing-function: ease-out;
+    animation-delay: 0;
+    animation-direction: alternate;
+    animation-iteration-count: 1;
+    animation-fill-mode: forwards;
+    animation-play-state: running;
+  }
 
 .node-path {
     background-color: rgb(231, 231, 150);
 }
+
+@keyframes visitedAnimation {
+    0% {
+      transform: scale(0.3);
+      background-color: #0C75E6;
+      border-radius: 100%;
+    }
+  
+    50% {
+      background-color: #089DBE;
+    }
+  
+    75% {
+      transform: scale(1.2);
+      background-color: #04C696;
+    }
+  
+    100% {
+      transform: scale(1);
+      background-color: #00EE6E;
+    }
+  }
+  
+  .node-wall {
+    background-color: rgb(12, 53, 71);
+  }
+  
+  .node-path {
+    animation-name: shortestPath;
+    animation-duration: 1.5s;
+    animation-timing-function: ease-out;
+    animation-delay: 0;
+    animation-direction: alternate;
+    animation-iteration-count: 1;
+    animation-fill-mode: forwards;
+    animation-play-state: running;
+  }
+  
+  @keyframes shortestPath {
+    0% {
+      transform: scale(0.6);
+      background-color: rgb(255, 254, 106);
+    }
+  
+    50% {
+      transform: scale(1.2);
+      background-color: rgb(255, 254, 106);
+    }
+  
+    100% {
+      transform: scale(1);
+      background-color: rgb(255, 254, 106);
+    }
+  }

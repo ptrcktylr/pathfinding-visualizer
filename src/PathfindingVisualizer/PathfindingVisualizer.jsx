@@ -36,8 +36,7 @@ export default class PathfindingVisualizer extends Component {
 
     // handles animating visited nodes and path
     animateDijkstra(visitedNodesInOrder, path) {
-        // i = 1 so we don't change startnode color
-        for (let i = 1; i <= visitedNodesInOrder.length; i++) {
+        for (let i = 0; i <= visitedNodesInOrder.length; i++) {
             if (i === visitedNodesInOrder.length) {
                 setTimeout(() => {
                     this.animatePath(path); 
@@ -46,7 +45,11 @@ export default class PathfindingVisualizer extends Component {
             }
             setTimeout(() => {
                 const node = visitedNodesInOrder[i];
-                document.getElementById(`node-${node.row}-${node.col}`).className = "node node-visited"
+                // don't recolor start or finish node
+                let node_classes = document.getElementById(`node-${node.row}-${node.col}`).classList
+                let node_not_empty = node_classes.contains('node-start') || node_classes.contains('node-finish')
+                if (!node_not_empty)
+                    document.getElementById(`node-${node.row}-${node.col}`).className = "node node-visited"
             }, 10 * i);
         }
     }
@@ -56,7 +59,9 @@ export default class PathfindingVisualizer extends Component {
         for (let i = 0; i < path.length; i++) {
             setTimeout(() => {
                 const node = path[i];
-                document.getElementById(`node-${node.row}-${node.col}`).className = "node node-path";
+                // don't recolor start or finish node
+                if (document.getElementById(`node-${node.row}-${node.col}`).classList.contains('node-visited'))
+                    document.getElementById(`node-${node.row}-${node.col}`).className = "node node-path";
             }, 50 * i);
         }
     }
